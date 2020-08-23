@@ -3,8 +3,8 @@ if [[ ! -e $CMDLINE_COMP_GEN_ZSH_CONFIG_DIR ]]; then
     mkdir -p $CMDLINE_COMP_GEN_ZSH_CONFIG_DIR
 fi
 [ $CMDLINE_COMP_GEN_ZSH_CACHE_DIR ] || export CMDLINE_COMP_GEN_ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cmdline_comp_gen.zsh"
-if [[ ! -e $CMDLINE_COMP_GEN_ZSH_CACHE_DIR ]]; then
-    mkdir -p $CMDLINE_COMP_GEN_ZSH_CACHE_DIR
+if [[ ! -e $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/raw ]]; then
+    mkdir -p $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/raw
 fi
 
 function __cmdline_comp_gen::getCompsyncArg () {
@@ -22,7 +22,7 @@ function __cmdline_comp_gen::getCompsyncArg () {
 
 function cmdline_comp_gen () {
     local command_name=$(basename $1)
-    local output_file=$CMDLINE_COMP_GEN_ZSH_CACHE_DIR/$command_name.zsh
+    local output_file=$CMDLINE_COMP_GEN_ZSH_CACHE_DIR/raw/$command_name.zsh
     cat <<EOF > $output_file
 compdef __cmdline_comp_gen::comp::$command_name $command_name
 function __cmdline_comp_gen::comp::$command_name () {
@@ -48,6 +48,9 @@ EOF
 
 }
 EOF
+    echo '' > $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/cached_commands.zsh
+    for file ($CMDLINE_COMP_GEN_ZSH_CACHE_DIR/raw/*) cat $file >> $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/cached_commands.zsh
+    source $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/cached_commands.zsh
 }
 
-source $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/*
+source $CMDLINE_COMP_GEN_ZSH_CACHE_DIR/cached_commands.zsh
