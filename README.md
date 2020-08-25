@@ -22,3 +22,8 @@ cmdline_comp_gen <path_to_executable>
 ```
 
 Now you can use completion for `<executable>`
+
+
+## Config 
+
+TODO
