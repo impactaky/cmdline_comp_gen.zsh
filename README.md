@@ -5,9 +5,10 @@ Zsh Completion Generator for https://github.com/tanakh/cmdline
 
 Add your plugin manager
 
-e.g. zplug)
+e.g. zinit)
 ```zsh
-zplug "impactaky/cmdline_comp_gen.zsh"
+zinit ice atload"zicompinit"
+zinit light impactaky/cmdline_comp_gen.zsh
 ```
 
 or `source cmdline_comp_gen.plugin.zsh` in your zshrc
